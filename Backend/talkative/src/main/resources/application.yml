@@ -1,6 +1,9 @@
 spring:
   application.name: Talkative
 
+  profiles:
+    active: dev
+
   server:
     port: 8000
 
