@@ -1,4 +1,4 @@
-package com.talkative.Entitiy;
+package com.talkative.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
