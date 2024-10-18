@@ -20,7 +20,10 @@ Manage Group Membership: Group admins can remove users or delete the entire grou
 5. User Interface
 Homepage: Displays all conversations, sorted by the latest message timestamp.
 Responsive Design: Built with React.js for a dynamic, responsive UI.
+
+
 Tech Stack
+
 Frontend:
 React.js: Dynamic UI for chat, group management, and user interaction.
 WebSocket: Enables real-time communication between users.
