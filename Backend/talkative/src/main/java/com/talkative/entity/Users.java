@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,6 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class Users implements UserDetails {
 
     @Id
@@ -38,7 +41,7 @@ public class Users implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -48,6 +51,9 @@ public class Users implements UserDetails {
 
     @Column(name = "is_verified", nullable = false)
     private Boolean isVerified = false;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private EmailVerification otpCode;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

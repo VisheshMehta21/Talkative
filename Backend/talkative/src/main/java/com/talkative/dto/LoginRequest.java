@@ -7,8 +7,8 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignupResponse {
+public class LoginRequest {
 
     private String email;
-    private String message;
+    private String passqord;
 }

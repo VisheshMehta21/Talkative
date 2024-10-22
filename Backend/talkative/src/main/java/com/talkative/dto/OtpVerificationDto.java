@@ -7,8 +7,8 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignupResponse {
+public class OtpVerificationDto {
 
+    private String otpCode;
     private String email;
-    private String message;
 }
