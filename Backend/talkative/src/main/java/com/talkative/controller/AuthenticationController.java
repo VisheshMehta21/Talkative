@@ -32,13 +32,4 @@ public class AuthenticationController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    @PostMapping("/verifyOtp")
-    public ResponseEntity<?> verifyOtp(@RequestBody OtpVerificationDto otpVerificationDto) {
-
-        if(authenticationService.verifyOtp(otpVerificationDto))
-            return new ResponseEntity<>(HttpStatus.OK);
-        else
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
 }

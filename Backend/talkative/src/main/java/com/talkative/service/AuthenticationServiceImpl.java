@@ -46,6 +46,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             user.setIsVerified(true);
 
             user = usersRepository.save(user);
+
+            signupResponse.setMessage(MessageConstants.SIGNUP_SUCCESSFUL);
+            signupResponse.setEmail(user.getEmail());
         }
 
         return signupResponse;
