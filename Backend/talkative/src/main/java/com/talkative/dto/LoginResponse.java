@@ -7,8 +7,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OtpVerificationDto {
+public class LoginResponse {
 
-    private String otpCode;
-    private String email;
+    public String jwtToken;
 }
