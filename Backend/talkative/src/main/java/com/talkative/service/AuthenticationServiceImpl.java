@@ -20,9 +20,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public UsersRepository usersRepository;
 
     @Autowired
-    public OtpService otpService;
-
-    @Autowired
     public PasswordEncoder passwordEncoder;
 
     @Override
@@ -49,11 +46,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             user.setIsVerified(true);
 
             user = usersRepository.save(user);
-
-            otpService.saveOtp(user);
-
-            signupResponse.setEmail(user.getEmail());
-            signupResponse.setMessage(MessageConstants.SIGNUP_SUCCESSFUL);
         }
 
         return signupResponse;

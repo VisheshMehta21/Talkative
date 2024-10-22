@@ -52,9 +52,6 @@ public class Users implements UserDetails {
     @Column(name = "is_verified", nullable = false)
     private Boolean isVerified = false;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private EmailVerification otpCode;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
