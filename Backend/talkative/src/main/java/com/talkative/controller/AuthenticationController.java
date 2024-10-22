@@ -30,7 +30,7 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest) {
 
-
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/verifyOtp")
