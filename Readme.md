@@ -27,31 +27,23 @@ Tech Stack
 Frontend:
 
 React.js: Dynamic UI for chat, group management, and user interaction.
-
 WebSocket: Enables real-time communication between users.
-
 Axios: For making secure API calls to the backend.
 
 Backend:
 
 Spring Boot: RESTful API services for handling user authentication, messaging, group management, and more.
-
 Spring Security: Provides JWT-based security and session management.
-
 Spring Data JPA: For ORM and database interaction with MySQL.
-
 WebSocket (Spring): Backend support for real-time WebSocket messaging.
 
 Database:
 
 MySQL: Relational database for storing user data, messages, groups, and chat information.
-
 Spring Data JPA: Handles ORM (Object Relational Mapping) between Java objects and MySQL tables.
 
 DevOps & Tools:
 
 Maven: Dependency management and project build tool for the Spring Boot backend.
-
 Git: Version control system for managing codebase.
-
 Postman: API testing and development.
