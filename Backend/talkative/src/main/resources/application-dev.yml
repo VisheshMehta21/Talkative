@@ -5,6 +5,9 @@ spring:
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  server:
+    port: 8000
+
   jpa:
     hibernate:
       ddl-auto: update
