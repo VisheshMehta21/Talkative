@@ -1,11 +1,22 @@
-import React, { useState } from "react";
-import { Login } from "./Login";
-import { Signup } from "./Signup";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import Login from "./Login";
+import Signup from "./Signup";
 import welcome from '../assets/Welcome.jpg'
-import { FaFacebookF } from "react-icons/fa";
-import { FaGoogle } from "react-icons/fa";
+
 export const Registration = () => {
+  const location = useLocation();
   const [isLogin, setIsLogin] = useState(false);
+
+  // Check the route to toggle between login and signup
+  useEffect(() => {
+    if (location.pathname === "/login") {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }, [location]);
+
   return (
     <div className="bg-sky-50">
     <div className="px-4 max-w-7xl mx-auto lg:space-x-20 flex justify-center items-center h-screen bg-slate-400">
@@ -48,4 +59,8 @@ export const Registration = () => {
         <div className="flex items-center justify-center border border-black rounded-lg space-x-1 p-2">
           <FaFacebookF />
           <p>Sign in with Facebook</p>
-        </div> */
+        </div> 
+        
+        import { FaFacebookF } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
+*/

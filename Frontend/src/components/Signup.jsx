@@ -1,7 +1,43 @@
-import React from "react";
+import React, { useState } from 'react';
+import axios from 'axios';
 import { CiUser } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 import { RiLockPasswordLine } from "react-icons/ri";
-export const Signup = () => {
+
+function Signup() {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  // const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState(''); // State to manage error messages
+  const navigate = useNavigate(); // Get the history object for redirection
+
+  const handleSignup = async (e) => {
+
+    e.preventDefault();
+      try {
+
+          /* if (password !== confirmPassword) {
+              throw new Error("Passwords do not match");
+          } */
+          const response = await axios.post('http://localhost:8080/api/v1/auth/signup', {
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              password: password
+          });
+          // Handle successful signup
+          console.log(response.data);
+          navigate('/home'); 
+    
+      } catch (error) {
+          // Handle signup error
+          console.error('Signup failed:', error.response ? error.response.data : error.message);
+          setError(error.response ? error.response.data : error.message);
+      }
+  };
+  
   return (
    <div>
        
@@ -13,6 +49,9 @@ export const Signup = () => {
             className="bg-transparent w-full outline-none"
             type="text"
             placeholder="First Name"
+            required
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)} 
           />
         </div>
 
@@ -22,6 +61,9 @@ export const Signup = () => {
             className="bg-transparent w-full outline-none"
             type="text"
             placeholder="Last Name"
+            required
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)} 
           />
         </div>
 
@@ -31,6 +73,9 @@ export const Signup = () => {
             className="bg-transparent w-full outline-none"
             type="text"
             placeholder="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)} 
           />
         </div>
 
@@ -40,10 +85,17 @@ export const Signup = () => {
             className="bg-transparent w-full outline-none"
             type="password"
             placeholder="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)} 
           />
         </div>
-        <button className="bg-black text-white rounded-lg w-full p-2 mb-4">Sign up</button>
+        {/* Render error message if exists */}
+        {error && <p className="text-danger">{error}</p>}
+        <button className="bg-black text-white rounded-lg w-full p-2 mb-4" onClick={handleSignup}>Sign up</button>
       </form>
     </div>
   );
-};
+}
+
+export default Signup;
