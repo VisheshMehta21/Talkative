@@ -4,12 +4,10 @@ spring:
   profiles:
     active: dev
 
-  server:
-    port: 8000
-
 server:
   servlet:
     context-path: /api/v1/
+  port: 8000
 
 security:
   jwt:
