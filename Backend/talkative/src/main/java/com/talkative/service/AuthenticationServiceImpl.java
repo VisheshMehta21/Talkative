@@ -4,6 +4,8 @@ import com.talkative.dto.LoginRequest;
 import com.talkative.dto.SignupRequest;
 import com.talkative.dto.SignupResponse;
 import com.talkative.entity.Users;
+import com.talkative.exception.UserAlreadyExistsException;
+import com.talkative.exception.UsernameNotFoundException;
 import com.talkative.repository.UsersRepository;
 import com.talkative.utility.MessageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,32 +30,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public SignupResponse signup(SignupRequest signupRequest) {
-
         SignupResponse signupResponse = new SignupResponse();
-
         String email = signupRequest.getEmail();
 
-        Optional<Users> users = usersRepository.findByEmail(email);
+        // Check if the user already exists, throw exception if true
+        usersRepository.findByEmail(email)
+                .ifPresent(user -> {
+                    throw new UserAlreadyExistsException(MessageConstants.USER_EXISTS);
+                });
 
-        if(users.isPresent()) {
-            signupResponse.setEmail(email);
-            signupResponse.setMessage(MessageConstants.USER_EXISTS);
-        }
+        // If user does not exist, proceed with signup
+        Users user = new Users();
+        user.setFirstname(signupRequest.getFirstName());
+        user.setLastName(signupRequest.getLastName());
+        user.setEmail(signupRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        user.setIsVerified(true);
 
-        else {
+        // Save the new user to the database
+        user = usersRepository.save(user);
 
-            Users user = new Users();
-            user.setFirstname(signupRequest.getFirstName());
-            user.setLastName(signupRequest.getLastName());
-            user.setEmail(signupRequest.getEmail());
-            user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-            user.setIsVerified(true);
-
-            user = usersRepository.save(user);
-
-            signupResponse.setMessage(MessageConstants.SIGNUP_SUCCESSFUL);
-            signupResponse.setEmail(user.getEmail());
-        }
+        // Prepare a successful signup response
+        signupResponse.setMessage(MessageConstants.SIGNUP_SUCCESSFUL);
+        signupResponse.setEmail(user.getEmail());
 
         return signupResponse;
     }
@@ -61,15 +60,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public Users login(LoginRequest loginRequest) {
 
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getEmail(),
-                            loginRequest.getPassword()
-                    )
-            );
+        // Fetch the user by email first
+        Users user = usersRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException(MessageConstants.USER_NOT_EXIST));
 
-            return usersRepository.findByEmail(loginRequest.getEmail())
-                    .orElseThrow();
+        // Check if the user's email is verified
+        if (!user.getIsVerified()) {
+            throw new IllegalStateException(MessageConstants.VERIFY_EMAIL);
+        }
+
+        // Authenticate the user
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()
+                )
+        );
+
+        return user; // Return the authenticated use
 
     }
 
