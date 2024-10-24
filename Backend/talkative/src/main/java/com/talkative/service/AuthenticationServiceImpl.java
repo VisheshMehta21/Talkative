@@ -5,7 +5,7 @@ import com.talkative.dto.SignupRequest;
 import com.talkative.dto.SignupResponse;
 import com.talkative.entity.Users;
 import com.talkative.exception.UserAlreadyExistsException;
-import com.talkative.exception.UsernameNotFoundException;
+import com.talkative.exception.EmailNotFoundException;
 import com.talkative.repository.UsersRepository;
 import com.talkative.utility.MessageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -62,7 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // Fetch the user by email first
         Users user = usersRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException(MessageConstants.USER_NOT_EXIST));
+                .orElseThrow(() -> new EmailNotFoundException(MessageConstants.USER_NOT_EXIST));
 
         // Check if the user's email is verified
         if (!user.getIsVerified()) {
