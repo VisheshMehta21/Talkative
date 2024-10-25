@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -30,7 +29,7 @@ public class Users implements UserDetails {
     private Long id;
 
     @Column(name = "first_name", nullable = false)
-    private String firstname;
+    private String firstName;
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
@@ -40,6 +39,9 @@ public class Users implements UserDetails {
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "profile_url")
+    private String profileUrl;
 
     @Column(updatable = false, nullable = false)
     @CreatedDate

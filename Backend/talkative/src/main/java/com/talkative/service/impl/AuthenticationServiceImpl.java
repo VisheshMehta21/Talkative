@@ -1,4 +1,4 @@
-package com.talkative.service;
+package com.talkative.service.impl;
 
 import com.talkative.dto.LoginRequest;
 import com.talkative.dto.SignupRequest;
@@ -7,6 +7,7 @@ import com.talkative.entity.Users;
 import com.talkative.exception.UserAlreadyExistsException;
 import com.talkative.exception.EmailNotFoundException;
 import com.talkative.repository.UsersRepository;
+import com.talkative.service.AuthenticationService;
 import com.talkative.utility.MessageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,7 +40,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         // If user does not exist, proceed with signup
         Users user = new Users();
-        user.setFirstname(signupRequest.getFirstName());
+        user.setFirstName(signupRequest.getFirstName());
         user.setLastName(signupRequest.getLastName());
         user.setEmail(signupRequest.getEmail());
         user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));

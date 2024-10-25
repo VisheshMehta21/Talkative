@@ -6,7 +6,7 @@ import com.talkative.dto.SignupResponse;
 import com.talkative.dto.SignupRequest;
 import com.talkative.entity.Users;
 import com.talkative.service.AuthenticationService;
-import com.talkative.service.JwtService;
+import com.talkative.service.impl.JwtService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

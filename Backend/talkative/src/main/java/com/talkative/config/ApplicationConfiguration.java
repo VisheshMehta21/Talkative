@@ -1,6 +1,7 @@
 package com.talkative.config;
 
 import com.talkative.repository.UsersRepository;
+import com.talkative.utility.MessageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,7 @@ public class ApplicationConfiguration {
     @Bean
     UserDetailsService userDetailsService() {
         return username -> usersRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException(MessageConstants.USER_NOT_EXIST));
     }
 
     @Bean

@@ -1,4 +1,4 @@
-package com.talkative.service;
+package com.talkative.service.impl;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
