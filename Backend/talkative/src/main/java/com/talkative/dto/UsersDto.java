@@ -4,17 +4,17 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UsersDto {
 
-    public String firstName;
-    public String lastName;
-    public String profileUrl;
-    public String email;
-    public LocalDateTime createdAt;
-
+    private String firstName;
+    private String lastName;
+    private String profileUrl;
+    private String email;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private boolean isVerified;
 }

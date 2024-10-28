@@ -7,4 +7,5 @@ import java.util.List;
 public interface UsersService {
 
     public List<UsersDto> searchUsers(String query);
+    public UsersDto findUserByEmail(String email);
 }
