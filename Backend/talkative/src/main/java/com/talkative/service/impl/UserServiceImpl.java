@@ -1,18 +1,19 @@
 package com.talkative.service.impl;
 
-import com.talkative.dto.UsersDto;
+import com.talkative.dto.UsersProfileDto;
+import com.talkative.dto.UsersProfilePicUpdateDto;
+import com.talkative.dto.UsersProfileUpdateDto;
 import com.talkative.entity.Users;
 import com.talkative.exception.EmailNotFoundException;
 import com.talkative.repository.UsersRepository;
+import com.talkative.service.FileStorageService;
 import com.talkative.service.UsersService;
 import com.talkative.utility.MessageConstants;
-import jdk.jshell.spi.ExecutionControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,8 +22,11 @@ public class UserServiceImpl implements UsersService {
     @Autowired
     public UsersRepository usersRepository;
 
+    @Autowired
+    public FileStorageService fileStorageService;
+
     @Override
-    public List<UsersDto> searchUsers(String query) {
+    public List<UsersProfileDto> searchUsers(String query) {
         if (query == null || query.isEmpty()) {
             return Collections.emptyList();
         }
@@ -30,7 +34,7 @@ public class UserServiceImpl implements UsersService {
         return usersRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(query, query, query)
                 .stream()
                 .map(user -> {
-                    UsersDto usersProfile = new UsersDto();
+                    UsersProfileDto usersProfile = new UsersProfileDto();
                     usersProfile.setFirstName(user.getFirstName());
                     usersProfile.setLastName(user.getLastName());
                     usersProfile.setCreatedAt(user.getCreatedAt());
@@ -42,12 +46,12 @@ public class UserServiceImpl implements UsersService {
     }
 
     @Override
-    public UsersDto findUserByEmail(String email) {
+    public UsersProfileDto findUserByEmail(String email) {
 
         Users user = usersRepository.findByEmail(email)
                 .orElseThrow(() -> new EmailNotFoundException(MessageConstants.USER_NOT_EXIST));
 
-        UsersDto usersProfile = new UsersDto();
+        UsersProfileDto usersProfile = new UsersProfileDto();
 
         usersProfile.setFirstName(user.getFirstName());
         usersProfile.setLastName(user.getLastName());
@@ -58,4 +62,26 @@ public class UserServiceImpl implements UsersService {
 
         return usersProfile;
     }
+
+    @Override
+    public UsersProfileDto updateUserProfile(UsersProfileUpdateDto usersProfileUpdateDto) {
+        return null;
+    }
+
+    @Override
+    public void updateUserProfilePic(UsersProfilePicUpdateDto usersProfilePicUpdateDto, String email) throws Exception {
+
+        String profileUrl = fileStorageService.uploadFile(usersProfilePicUpdateDto.getProfilePic());
+
+        Users user = usersRepository.findByEmail(email)
+                .orElseThrow(() -> new EmailNotFoundException(MessageConstants.USER_NOT_EXIST));
+
+        user.setProfileUrl(profileUrl);
+
+        Users updatedUser = usersRepository.save(user);
+
+        String updatedProfileUrl = updatedUser.getProfileUrl();
+    }
+
+
 }

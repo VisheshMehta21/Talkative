@@ -1,20 +1,18 @@
 package com.talkative.dto;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
+@Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsersDto {
+public class UsersProfileUpdateDto {
 
     private String firstName;
     private String lastName;
-    private String profileUrl;
-    private String email;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private boolean isVerified;
+
 }

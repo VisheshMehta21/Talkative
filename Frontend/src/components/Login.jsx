@@ -13,7 +13,7 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault(); // Prevent page refresh
 
-        try {
+        try { 
             const response = await axios.post('http://localhost:8000/api/v1/auth/login', { 
                 email: email, 
                 password: password 

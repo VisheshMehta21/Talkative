@@ -35,4 +35,6 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), "Invalid email or password.", HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
+
+
 }
