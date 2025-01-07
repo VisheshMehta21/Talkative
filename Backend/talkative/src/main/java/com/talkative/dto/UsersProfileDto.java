@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class UsersProfileDto {
 
+
+
     private String firstName;
     private String lastName;
     private String profileUrl;

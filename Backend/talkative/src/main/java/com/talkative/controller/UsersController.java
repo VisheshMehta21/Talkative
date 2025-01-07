@@ -34,7 +34,7 @@ public class UsersController {
     @GetMapping("/profile")
     public ResponseEntity<UsersProfileDto> getUserProfile(@RequestParam(value = "email", required = true) String email) {
 
-        UsersProfileDto usersProfile = usersService.findUserByEmail(email);
+        UsersProfileDto usersProfile = usersService.getUserProfile(email);
         log.info("User profile :: loged in {}", usersProfile);
         return new ResponseEntity<UsersProfileDto>(usersProfile, HttpStatus.OK);
     }

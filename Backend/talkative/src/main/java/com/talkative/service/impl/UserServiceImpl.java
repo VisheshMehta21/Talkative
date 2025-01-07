@@ -46,7 +46,7 @@ public class UserServiceImpl implements UsersService {
     }
 
     @Override
-    public UsersProfileDto findUserByEmail(String email) {
+    public UsersProfileDto getUserProfile(String email) {
 
         Users user = usersRepository.findByEmail(email)
                 .orElseThrow(() -> new EmailNotFoundException(MessageConstants.USER_NOT_EXIST));
@@ -61,6 +61,12 @@ public class UserServiceImpl implements UsersService {
         usersProfile.setVerified(user.getIsVerified());
 
         return usersProfile;
+    }
+
+    @Override
+    public Users findUserByEmail(String email) {
+        return usersRepository.findByEmail(email)
+                .orElseThrow(() -> new EmailNotFoundException(MessageConstants.USER_NOT_EXIST));
     }
 
     @Override

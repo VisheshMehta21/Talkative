@@ -8,6 +8,7 @@ import com.talkative.exception.UserAlreadyExistsException;
 import com.talkative.exception.EmailNotFoundException;
 import com.talkative.repository.UsersRepository;
 import com.talkative.service.AuthenticationService;
+import com.talkative.service.UsersService;
 import com.talkative.utility.MessageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
     public AuthenticationManager authenticationManager;
+
+    @Autowired
+    public UsersService usersService;
 
     @Override
     public SignupResponse signup(SignupRequest signupRequest) {
@@ -60,8 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public Users login(LoginRequest loginRequest) {
 
         // Fetch the user by email first
-        Users user = usersRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new EmailNotFoundException(MessageConstants.USER_NOT_EXIST));
+        Users user = usersService.findUserByEmail(loginRequest.getEmail());
 
         // Check if the user's email is verified
         if (!user.getIsVerified()) {
