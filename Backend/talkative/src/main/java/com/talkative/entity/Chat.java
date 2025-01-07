@@ -24,7 +24,7 @@ public class Chat {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	private Integer userId;
 	private String chatName;
 	private String chatImg;
 	private boolean isGroup;
@@ -32,13 +32,13 @@ public class Chat {
 	@ManyToMany
 	private Set<Users> admins= new HashSet<>();
 	
-	@ManyToOne            // only one user can create chat
+	@ManyToOne  // only one user can create chat
 	private Users createdBy;
 	
 	@ManyToMany
 	private Set<Users> users= new HashSet<>();
 	
-	@OneToMany             // only one message can reply to one chat message 
+	@OneToMany  // only one message can reply to one chat message
 	private List<Message> messages = new ArrayList<>();
 	
 	

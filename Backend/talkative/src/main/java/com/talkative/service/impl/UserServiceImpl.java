@@ -10,10 +10,12 @@ import com.talkative.service.FileStorageService;
 import com.talkative.service.UsersService;
 import com.talkative.utility.MessageConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +26,9 @@ public class UserServiceImpl implements UsersService {
 
     @Autowired
     public FileStorageService fileStorageService;
+
+    @Autowired
+    JwtService jwtService;
 
     @Override
     public List<UsersProfileDto> searchUsers(String query) {
@@ -87,6 +92,20 @@ public class UserServiceImpl implements UsersService {
         Users updatedUser = usersRepository.save(user);
 
         String updatedProfileUrl = updatedUser.getProfileUrl();
+    }
+
+    @Override
+    public Users findUserFromToken(String jwtToken) {
+
+        String email = jwtService.extractUsername(jwtToken);
+
+        if(email==null) {
+            throw new BadCredentialsException("Invalid token ");
+        }
+
+        return usersRepository.findByEmail(email)
+                .orElseThrow(() -> new EmailNotFoundException(MessageConstants.USER_NOT_EXIST));
+
     }
 
 

@@ -15,4 +15,5 @@ public interface UsersService {
     public Users findUserByEmail(String email);
     public UsersProfileDto updateUserProfile(UsersProfileUpdateDto usersProfileUpdateDto);
     public void updateUserProfilePic(UsersProfilePicUpdateDto usersProfilePicUpdateDto, String email) throws Exception;
+    public Users findUserFromToken(String jwtToken);
 }
