@@ -4,9 +4,9 @@ import com.talkative.dto.GroupChatReq;
 import com.talkative.dto.SingleChatRequest;
 import com.talkative.entity.Chat;
 import com.talkative.entity.Users;
+import com.talkative.exception.ChatNotFoundException;
 import com.talkative.service.ChatService;
 import com.talkative.service.UsersService;
-import com.talkative.service.impl.JwtService;
 import jdk.jshell.spi.ExecutionControl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class ChatController {
     }
 
     @PostMapping("/individual")
-    public ResponseEntity<Chat> createChatHandler(@RequestBody SingleChatRequest singleChatRequest, @RequestHeader("Authorization") String jwt) throws ExecutionControl.UserException {
+    public ResponseEntity<Chat> createIndividualChatHandler(@RequestBody SingleChatRequest singleChatRequest, @RequestHeader("Authorization") String jwt) throws ExecutionControl.UserException {
         Users reqUser = usersService.findUserByEmail(jwt);
         Chat chat = chatService.createChat(reqUser, singleChatRequest.getEmail());
 
@@ -39,13 +39,21 @@ public class ChatController {
     }
 
     @PostMapping("/group")
-    public ResponseEntity<Chat> createGroupHandler(@RequestBody GroupChatReq groupChatReq, @RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<Chat> createGroupChatHandler(@RequestBody GroupChatReq groupChatReq, @RequestHeader("Authorization") String jwt) {
         log.info("Req Received for create grp");
 
         System.out.println("Req Received for create grp"+ groupChatReq);
         Users reqUser = usersService.findUserByEmail(jwt);
 
         Chat chat = chatService.createGroup(groupChatReq, reqUser);
+
+        return  new ResponseEntity<Chat>(chat, HttpStatus.OK);
+    }
+
+    @GetMapping("/{chatId}")
+    public ResponseEntity<Chat> findChatByIdHandler(@PathVariable Integer chatId, @RequestHeader("Authorization") String jwt) throws ChatNotFoundException {
+
+        Chat chat = chatService.findChatById(chatId);
 
         return  new ResponseEntity<Chat>(chat, HttpStatus.OK);
     }

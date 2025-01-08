@@ -24,14 +24,14 @@ public class AuthenticationController {
     public JwtService jwtService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> register(@RequestBody @Valid SignupRequest signupRequest) {
+    public ResponseEntity<?> registrationHandler(@RequestBody @Valid SignupRequest signupRequest) {
 
         SignupResponse signupResponse = authenticationService.signup(signupRequest);
         return new ResponseEntity<SignupResponse>(signupResponse, HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid LoginRequest loginRequest) {
+    public ResponseEntity<?> loginHandler(@RequestBody @Valid LoginRequest loginRequest) {
 
         Users authenticatedUser = authenticationService.login(loginRequest);
 

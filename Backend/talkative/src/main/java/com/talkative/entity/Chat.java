@@ -24,7 +24,7 @@ public class Chat {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer userId;
+	private Integer chatId;
 	private String chatName;
 	private String chatImg;
 	private boolean isGroup;

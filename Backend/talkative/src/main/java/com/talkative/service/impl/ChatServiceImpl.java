@@ -3,12 +3,15 @@ package com.talkative.service.impl;
 import com.talkative.dto.GroupChatReq;
 import com.talkative.entity.Chat;
 import com.talkative.entity.Users;
+import com.talkative.exception.ChatNotFoundException;
 import com.talkative.repository.ChatRepository;
 import com.talkative.service.ChatService;
 import com.talkative.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -63,5 +66,12 @@ public class ChatServiceImpl implements ChatService {
         log.info("Group saved to Database {}", savedChats);
 
         return savedChats;
+    }
+
+    @Override
+    public Chat findChatById(Integer chatId) throws ChatNotFoundException {
+        return chatRepository.findById(chatId)
+                .orElseThrow(() -> new ChatNotFoundException(String.format("User with Chat Id %s not found.", chatId)));
+
     }
 }
