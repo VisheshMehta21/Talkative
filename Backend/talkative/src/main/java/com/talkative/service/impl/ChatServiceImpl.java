@@ -9,6 +9,7 @@ import com.talkative.service.ChatService;
 import com.talkative.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -81,8 +82,24 @@ public class ChatServiceImpl implements ChatService {
 
         Users user = usersService.findUserByEmail(email);
 
-        List<Chat> chats = chatRepository.findChatByUserId(user.getId());
+        return chatRepository.findChatByUserId(user.getId());
+    }
 
-        return chats;
+    @Override
+    public Chat addUserToGroup(Integer chatId, String email, Users reqUser) {
+
+        Chat group = chatRepository.findById(chatId)
+                .orElseThrow(() -> new ChatNotFoundException(String.format("User with Chat Id %s not found.", chatId)));
+
+        Users user = usersService.findUserByEmail(email);
+
+        if (group.getAdmins().contains(reqUser)) {
+            group.getUsers().add(user);
+            return chatRepository.save(group);
+        }
+        else {
+            throw new BadCredentialsException("U dont have access to add members in group");
+        }
+        
     }
 }

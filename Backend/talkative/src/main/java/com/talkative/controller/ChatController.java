@@ -69,4 +69,14 @@ public class ChatController {
 
         return  new ResponseEntity<List<Chat>>(chat, HttpStatus.OK);
     }
+
+    @PutMapping("/{chatId}/add/{userId}")
+    public ResponseEntity<Chat> addUserToGroupHandler(@PathVariable Integer chatId, @PathVariable String email, @RequestHeader("Authorization") String jwt) {
+
+        Users reqUser = usersService.findUserByEmail(jwt);
+
+        Chat chat = chatService.addUserToGroup(chatId, email, reqUser);
+
+        return  new ResponseEntity<Chat>(chat, HttpStatus.OK);
+    }
 }
