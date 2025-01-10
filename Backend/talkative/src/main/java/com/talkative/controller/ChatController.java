@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/chats")
 @Slf4j
@@ -56,5 +58,15 @@ public class ChatController {
         Chat chat = chatService.findChatById(chatId);
 
         return  new ResponseEntity<Chat>(chat, HttpStatus.OK);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<Chat>> findAllChatsByUserIdHandler(@RequestHeader("Authorization") String jwt) {
+
+        Users reqUser = usersService.findUserByEmail(jwt);
+
+        List<Chat> chat = chatService.findAllChatByUserId(reqUser.getEmail());
+
+        return  new ResponseEntity<List<Chat>>(chat, HttpStatus.OK);
     }
 }

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -69,9 +70,19 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Chat findChatById(Integer chatId) throws ChatNotFoundException {
+    public Chat findChatById(Integer chatId) {
         return chatRepository.findById(chatId)
                 .orElseThrow(() -> new ChatNotFoundException(String.format("User with Chat Id %s not found.", chatId)));
 
+    }
+
+    @Override
+    public List<Chat> findAllChatByUserId(String email) {
+
+        Users user = usersService.findUserByEmail(email);
+
+        List<Chat> chats = chatRepository.findChatByUserId(user.getId());
+
+        return chats;
     }
 }

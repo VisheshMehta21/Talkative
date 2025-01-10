@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface ChatRepository extends JpaRepository<Chat, Integer> {
 
 	@Query("select c from Chat c join c.users u where u.id =:userId")
-	public List<Chat> findChatByUserId(@Param("userId") Integer userId);
+	public List<Chat> findChatByUserId(@Param("userId") Long userId);
 	
 	@Query("SELECT c FROM Chat c WHERE c.isGroup = false AND :user2 MEMBER OF c.users AND :reqUser MEMBER OF c.users")
 	public Chat findSingleChatByUserIds(@Param("user2") Users user2, @Param("reqUser") Users reqUser);
