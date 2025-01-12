@@ -100,6 +100,30 @@ public class ChatServiceImpl implements ChatService {
         else {
             throw new BadCredentialsException("U dont have access to add members in group");
         }
-        
     }
+
+    @Override
+    public Chat removeFromGroup(Integer chatId, String email, Users reqUser) {
+
+        Chat chat = chatRepository.findById(chatId)
+                .orElseThrow(() -> new ChatNotFoundException(String.format("User %s with Chat Id %s not found.", email, chatId)));
+
+        Users user = usersService.findUserByEmail(email);
+
+        if (chat.getAdmins().contains(reqUser)) {
+            chat.getUsers().remove(user);
+            return chatRepository.save(chat);
+
+        }
+        else if (chat.getUsers().contains(reqUser)) {
+            if(user.getId().equals(reqUser.getId())) {
+                chat.getUsers().remove(user);
+                return chatRepository.save(chat);
+            }
+        }
+
+        throw new BadCredentialsException("You Can't remove another user");
+
+    }
+
 }

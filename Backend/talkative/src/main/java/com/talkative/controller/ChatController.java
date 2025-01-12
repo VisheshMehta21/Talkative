@@ -79,4 +79,13 @@ public class ChatController {
 
         return  new ResponseEntity<Chat>(chat, HttpStatus.OK);
     }
+
+    @PutMapping("/{chatId}/remove/{userId}")
+    public ResponseEntity<Chat> removeUserFromGroupHandler(@PathVariable Integer chatId, @PathVariable String email, @RequestHeader("Authorization") String jwt) {
+
+        Users reqUser = usersService.findUserByEmail(jwt);
+        Chat chat = chatService.removeFromGroup(chatId, email, reqUser);
+
+        return  new ResponseEntity<Chat>(chat, HttpStatus.OK);
+    }
 }

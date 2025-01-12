@@ -17,4 +17,7 @@ public interface ChatService {
     public List<Chat> findAllChatByUserId(String email);
 
     public Chat addUserToGroup(Integer chatId, String email, Users reqUser);
+
+    public Chat removeFromGroup(Integer chatId, String email, Users reqUser);
+
 }
