@@ -1,5 +1,6 @@
 package com.talkative.controller;
 
+import com.talkative.apiresponse.ApiResponse;
 import com.talkative.dto.GroupChatReq;
 import com.talkative.dto.SingleChatRequest;
 import com.talkative.entity.Chat;
@@ -87,5 +88,17 @@ public class ChatController {
         Chat chat = chatService.removeFromGroup(chatId, email, reqUser);
 
         return  new ResponseEntity<Chat>(chat, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{chatId}")
+    public ResponseEntity<ApiResponse> deleteChatHandler(@PathVariable Integer chatId, @RequestHeader("Authorization") String jwt) {
+
+        Users reqUser = usersService.findUserByEmail(jwt);
+
+        chatService.deleteChat(chatId);
+
+        ApiResponse apiResponse = new ApiResponse("Chat Deleted Succesfully", true);
+
+        return  new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
     }
 }

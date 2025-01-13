@@ -20,4 +20,6 @@ public interface ChatService {
 
     public Chat removeFromGroup(Integer chatId, String email, Users reqUser);
 
+    public void deleteChat(Integer chatId);
+
 }
