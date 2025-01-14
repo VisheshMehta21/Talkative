@@ -31,6 +31,13 @@ public class UserServiceImpl implements UsersService {
     JwtService jwtService;
 
     @Override
+    public Users findUserById(Long userId) {
+
+        return usersRepository.findById(userId)
+                .orElseThrow(() -> new EmailNotFoundException(MessageConstants.USER_NOT_EXIST));
+    }
+
+    @Override
     public List<UsersProfileDto> searchUsers(String query) {
         if (query == null || query.isEmpty()) {
             return Collections.emptyList();
