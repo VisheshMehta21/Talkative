@@ -4,6 +4,7 @@ import com.talkative.dto.SendMessageRequest;
 import com.talkative.entity.Chat;
 import com.talkative.entity.Message;
 import com.talkative.entity.Users;
+import com.talkative.exception.ChatNotFoundException;
 import com.talkative.repository.MessageRepository;
 import com.talkative.service.ChatService;
 import com.talkative.service.MessageService;
@@ -39,6 +40,18 @@ public class MessageServiceImpl implements MessageService {
 		message.setTimestamp(LocalDateTime.now());
 
         return messageRepository.save(message);
+	}
+
+	@Override
+	public List<Message> getChatsMessages(Integer chatId, Users reqUser) {
+
+		Chat chat = chatService.findChatById(chatId);
+
+		if(!chat.getUsers().contains(reqUser)) {
+			throw new ChatNotFoundException(String.format("You are not authorized to view the messages for Chat Id %s.", chat.getChatId()));
+		}
+
+        return messageRepository.findByChatId(chat.getChatId());
 	}
 
 }

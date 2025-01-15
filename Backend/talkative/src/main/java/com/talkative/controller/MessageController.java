@@ -32,13 +32,24 @@ public class MessageController {
 	@PostMapping("/create")
 	public ResponseEntity<Message> sentMessageHandler(@RequestBody SendMessageRequest sendMessageRequest, @RequestHeader("Authorization") String jwt) {
 
-		Users user = usersService.findUserByEmail(jwt);
+		Users user = usersService.findUserFromToken(jwt);
 
 		sendMessageRequest.setUserId(user.getId());
 		Message sentMessage = messageService.sentMessage(sendMessageRequest);
 		System.out.println("Message sent successfully from" + user.getId());
 
 		return new ResponseEntity<Message>(sentMessage, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/chat/{chatId}")
+	public ResponseEntity<List<Message>> GetChatMessagesHandler(@PathVariable Integer chatId, @RequestHeader("Authorization") String jwt) {
+
+		Users user = usersService.findUserFromToken(jwt);
+
+		List<Message> messages = messageService.getChatsMessages(chatId, user);
+
+		return new ResponseEntity<List<Message>>(messages, HttpStatus.OK);
 
 	}
 
