@@ -12,14 +12,14 @@ public interface ChatService {
 
     public Chat createGroup(GroupChatReq req, Users reqUser);
 
-    public Chat findChatById(Integer chatId);
+    public Chat findChatById(Long chatId);
 
     public List<Chat> findAllChatByUserId(String email);
 
-    public Chat addUserToGroup(Integer chatId, String email, Users reqUser);
+    public Chat addUserToGroup(Long chatId, String email, Users reqUser);
 
-    public Chat removeFromGroup(Integer chatId, String email, Users reqUser);
+    public Chat removeFromGroup(Long chatId, String email, Users reqUser);
 
-    public void deleteChat(Integer chatId);
+    public void deleteChat(Long chatId);
 
 }

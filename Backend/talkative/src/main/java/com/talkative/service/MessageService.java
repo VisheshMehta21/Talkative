@@ -10,6 +10,10 @@ public interface MessageService {
 
 	public Message sentMessage(SendMessageRequest req);
 
-	public List<Message> getChatsMessages(Integer chatId, Users reqUser);
+	public List<Message> getChatsMessages(Long chatId, Users reqUser);
+
+	public Message findMessageById(Long messageId);
+
+	public void deleteMessage(Long messageId, Users reqUser);
 
 }

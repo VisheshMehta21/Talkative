@@ -1,11 +1,8 @@
 package com.talkative.exception.handler;
 
-import com.talkative.exception.ErrorResponse;
-import com.talkative.exception.EmailNotFoundException;
-import com.talkative.exception.UserAlreadyExistsException;
+import com.talkative.exception.*;
+import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -36,6 +33,18 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(MessagingException.class)
+    public ResponseEntity<ErrorResponse> handleMessageNotFoundException(MessageNotFoundException ex) {
+        log.error("Message not Founds : ", ex);
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), ex.getMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+    }
 
+    @ExceptionHandler(UserException.class)
+    public ResponseEntity<ErrorResponse> handleUserException(UserException ex) {
+        log.error("Generic User Exception: ", ex);
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage(), ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, errorResponse.getStatus());
+    }
 
 }

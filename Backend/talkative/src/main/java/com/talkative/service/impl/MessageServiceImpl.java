@@ -5,6 +5,8 @@ import com.talkative.entity.Chat;
 import com.talkative.entity.Message;
 import com.talkative.entity.Users;
 import com.talkative.exception.ChatNotFoundException;
+import com.talkative.exception.MessageNotFoundException;
+import com.talkative.exception.UserException;
 import com.talkative.repository.MessageRepository;
 import com.talkative.service.ChatService;
 import com.talkative.service.MessageService;
@@ -43,7 +45,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public List<Message> getChatsMessages(Integer chatId, Users reqUser) {
+	public List<Message> getChatsMessages(Long chatId, Users reqUser) {
 
 		Chat chat = chatService.findChatById(chatId);
 
@@ -52,6 +54,27 @@ public class MessageServiceImpl implements MessageService {
 		}
 
         return messageRepository.findByChatId(chat.getChatId());
+	}
+
+	@Override
+	public Message findMessageById(Long messageId) {
+
+		return messageRepository.findById(messageId).orElseThrow( () ->
+				new MessageNotFoundException(String.format("Message with Message Id %s not found.", messageId))
+		);
+	}
+
+	@Override
+	public void deleteMessage(Long messageId, Users reqUser) {
+
+		Message message = findMessageById(messageId);
+
+		if(message.getSenderId().getId().equals(reqUser.getId())) {
+			messageRepository.deleteById(messageId);
+		}
+		else {
+			throw new UserException(String.format("You cannot delete another users message %s.", reqUser.getUsername()));
+		}
 	}
 
 }

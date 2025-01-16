@@ -71,7 +71,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Chat findChatById(Integer chatId) {
+    public Chat findChatById(Long chatId) {
         return chatRepository.findById(chatId)
                 .orElseThrow(() -> new ChatNotFoundException(String.format("User with Chat Id %s not found.", chatId)));
 
@@ -86,7 +86,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Chat addUserToGroup(Integer chatId, String email, Users reqUser) {
+    public Chat addUserToGroup(Long chatId, String email, Users reqUser) {
 
         Chat group = chatRepository.findById(chatId)
                 .orElseThrow(() -> new ChatNotFoundException(String.format("User with Chat Id %s not found.", chatId)));
@@ -103,7 +103,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Chat removeFromGroup(Integer chatId, String email, Users reqUser) {
+    public Chat removeFromGroup(Long chatId, String email, Users reqUser) {
 
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new ChatNotFoundException(String.format("User %s with Chat Id %s not found.", email, chatId)));
@@ -127,7 +127,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void deleteChat(Integer chatId) {
+    public void deleteChat(Long chatId) {
 
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new ChatNotFoundException(String.format("Chat with Id %s not found.", chatId)));

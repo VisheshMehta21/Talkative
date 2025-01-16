@@ -2,6 +2,7 @@ package com.talkative.controller;
 
 import java.util.List;
 
+import com.talkative.apiresponse.ApiResponse;
 import com.talkative.dto.SendMessageRequest;
 import com.talkative.entity.Message;
 import com.talkative.entity.Users;
@@ -43,13 +44,26 @@ public class MessageController {
 	}
 
 	@GetMapping("/chat/{chatId}")
-	public ResponseEntity<List<Message>> GetChatMessagesHandler(@PathVariable Integer chatId, @RequestHeader("Authorization") String jwt) {
+	public ResponseEntity<List<Message>> GetChatMessagesHandler(@PathVariable Long chatId, @RequestHeader("Authorization") String jwt) {
 
 		Users user = usersService.findUserFromToken(jwt);
 
 		List<Message> messages = messageService.getChatsMessages(chatId, user);
 
 		return new ResponseEntity<List<Message>>(messages, HttpStatus.OK);
+
+	}
+
+	@DeleteMapping("/{messageId}")
+	public ResponseEntity<ApiResponse> deleteMessagesHandler(@PathVariable Long messageId, @RequestHeader("Authorization") String jwt) {
+
+		Users user = usersService.findUserFromToken(jwt);
+
+		messageService.deleteMessage(messageId, user);
+
+		ApiResponse apiResponse = new ApiResponse("Message deteted succesfuly -----", true);
+
+		return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
 
 	}
 

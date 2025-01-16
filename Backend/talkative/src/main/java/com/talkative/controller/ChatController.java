@@ -54,7 +54,7 @@ public class ChatController {
     }
 
     @GetMapping("/{chatId}")
-    public ResponseEntity<Chat> findChatByIdHandler(@PathVariable Integer chatId, @RequestHeader("Authorization") String jwt) throws ChatNotFoundException {
+    public ResponseEntity<Chat> findChatByIdHandler(@PathVariable Long chatId, @RequestHeader("Authorization") String jwt) throws ChatNotFoundException {
 
         Chat chat = chatService.findChatById(chatId);
 
@@ -72,7 +72,7 @@ public class ChatController {
     }
 
     @PutMapping("/{chatId}/add/{userId}")
-    public ResponseEntity<Chat> addUserToGroupHandler(@PathVariable Integer chatId, @PathVariable String email, @RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<Chat> addUserToGroupHandler(@PathVariable Long chatId, @PathVariable String email, @RequestHeader("Authorization") String jwt) {
 
         Users reqUser = usersService.findUserByEmail(jwt);
 
@@ -82,7 +82,7 @@ public class ChatController {
     }
 
     @PutMapping("/{chatId}/remove/{userId}")
-    public ResponseEntity<Chat> removeUserFromGroupHandler(@PathVariable Integer chatId, @PathVariable String email, @RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<Chat> removeUserFromGroupHandler(@PathVariable Long chatId, @PathVariable String email, @RequestHeader("Authorization") String jwt) {
 
         Users reqUser = usersService.findUserByEmail(jwt);
         Chat chat = chatService.removeFromGroup(chatId, email, reqUser);
@@ -91,7 +91,7 @@ public class ChatController {
     }
 
     @DeleteMapping("/delete/{chatId}")
-    public ResponseEntity<ApiResponse> deleteChatHandler(@PathVariable Integer chatId, @RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<ApiResponse> deleteChatHandler(@PathVariable Long chatId, @RequestHeader("Authorization") String jwt) {
 
         Users reqUser = usersService.findUserByEmail(jwt);
 
