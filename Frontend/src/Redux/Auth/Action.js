@@ -1,10 +1,10 @@
 import { BASE_API_URL } from '../../Config/Config.js';
 
 import {
-    REGISTER
+    SignUp
   } from './ActionType';
 
-  export const register = (data) => async (dispatch) => {
+  export const signup = (data) => async (dispatch) => {
     try {
       const res = await fetch(`${BASE_API_URL}/auth/signup`, {
         method: 'POST',
@@ -16,7 +16,7 @@ import {
   
       const resData = await res.json();
       if (resData.jwt) localStorage.setItem('token', resData.jwt);
-      dispatch({ type: REGISTER, payload: resData });
+      dispatch({ type: SignUp, payload: resData });
     } catch (error) {
       console.error('Registration error:', error);
     }

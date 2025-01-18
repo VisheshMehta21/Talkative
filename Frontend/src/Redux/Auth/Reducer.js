@@ -1,5 +1,6 @@
 import {
-    REGISTER
+    SignUp,
+    SignIn
   } from "./ActionType";
   
   const initialState = {
@@ -9,9 +10,9 @@ import {
   };
   
   export const authReducer = (state = initialState, { type, payload }) => {
-    if (type === REGISTER) {
+    if (type === SignUp) {
       return { ...state, signup: payload };
-    } else if (type === LOGIN_USER) {
+    } else if (type === SignIn) {
       return { ...state, signin: payload };
     }
     else {
