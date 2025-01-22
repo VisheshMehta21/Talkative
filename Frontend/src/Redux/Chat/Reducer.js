@@ -14,5 +14,8 @@ export const chatReducer=(store=initialValue, {type,payload}) =>{
     else if(type===CREATE_GROUP){
         return{ ...store,createdGroup:payload }
     }
+    else  if(type===GET_ALL_CHAT){
+        return{ ...store,chats:payload }
+    }
     return store;
 }

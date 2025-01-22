@@ -1,5 +1,5 @@
 import { BASE_API_URL } from "../../Config/Config"
-import { CREATE_CHAT, CREATE_GROUP } from "./ActionType";
+import { CREATE_CHAT, CREATE_GROUP, GET_ALL_CHAT } from "./ActionType";
 
 
 export const createChat =(chatData) => async (dispatch) =>{
@@ -36,6 +36,25 @@ export const createGroupChat =(chatData) => async (dispatch) =>{
         const data = await res.json();
         console.log("Create Group Server Response :: ", data);
         dispatch({type:CREATE_GROUP,payload:data});
+    } catch (error) {
+        console.log("Something went wrong in chat Action (CreateGroupChat) :: UI Error :: ", error);
+    }
+}
+
+export const getUserChat =(chatData) => async (dispatch) =>{
+    try {
+        const res = await fetch(`${BASE_API_URL}/api/chats/user`, {
+            method:"GET",
+            headers:{
+                "Content-Type" : "application/json",
+                Authorization:`Bearer ${chatData.token}`
+            },
+            
+        })
+    
+        const data = await res.json();
+        console.log("Get all chats from server", data);
+        dispatch({type:GET_ALL_CHAT,payload:data});
     } catch (error) {
         console.log("Something went wrong in chat Action (CreateGroupChat) :: UI Error :: ", error);
     }
