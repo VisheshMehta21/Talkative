@@ -30,7 +30,7 @@ function Login() {
 
     return (
         <div>
-          <form onSubmit={handleLogin}> {/* Add onSubmit to handle login */}
+          <form onSubmit={handleLogin}> 
             <div className="flex items-center space-x-1 bg-gray-200 rounded-lg p-2">
               <CiUser className="text-xl" />
               <input
@@ -53,13 +53,16 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            {error && <p className="text-danger">{error}</p>} {/* Render error message if exists */}
+            {error && <p className="text-danger">{error}</p>} 
             <button type="submit" className="bg-black text-white rounded-lg w-full p-2 mb-4">
               Login
             </button>
           </form>
         </div>
     );
-}
+} 
 
-export default Login;
+export default Login; 
+
+
+

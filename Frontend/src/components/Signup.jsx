@@ -1,103 +1,130 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import { Alert, Button, Snackbar } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { CiUser } from "react-icons/ci";
-import { RiLockPasswordLine } from "react-icons/ri";
+import { currentUser, signup } from '../Redux/Auth/Action';
 
-function Signup() {
+const SignUp = () => {
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [inputData, setInputData] = useState({ fullName: "", email: "", password: "", confirmPassword: "" });
+  const [passwordMismatch, setPasswordMismatch] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { auth } = useSelector(store => store.auth);
+  const token = localStorage.getItem("token");
 
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  //const [confirmPassword, setConfirmPassword] = useState('');
-  const navigate = useNavigate(); // Get the history object for redirection
+  useEffect(() => {
+    if (token && !auth.reqUser) {
+      dispatch(currentUser(token));
+    }
+  }, [token, auth.reqUser, dispatch]);
 
-  const handleSignup = async (e) => {
-
+  const handleSubmit = (e) => {
     e.preventDefault();
-      try {
-          
 
-         /* if (password !== confirmPassword) {
-              throw new Error("Passwords do not match");
-          }*/ 
+    if (inputData.password !== inputData.confirmPassword) {
+      setPasswordMismatch(true);
+      return; 
+    }
 
-          const response = await axios.post('http://localhost:8000/api/v1/auth/signup', {
-              firstName: firstName,
-              lastName: lastName,
-              email: email,
-              password: password
-          });
-          // Handle successful signup
-          console.log(response.data);
-          navigate('/home');
-      } catch (error) {
-          // Handle signup error
-          console.error('Signup failed:', error.response ? error.response.data : error.message);
-          setError(error.response ? error.response.data : error.message);
-      }
+    setPasswordMismatch(false); 
+    dispatch(signup(inputData)); 
+    setOpenSnackBar(true); 
   };
-  
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputData((values) => ({ ...values, [name]: value }));
+  };
+
+  const handleSnackBarClose = () => {
+    setOpenSnackBar(false);
+  };
+
+  useEffect(() => {
+    if (auth.reqUser?.fullName) {
+      navigate("/");
+    }
+  }, [auth, navigate]);
+
   return (
-   <div>
-       
-      <form>
+    <div>
+      <div className='flex flex-col justify-center min-h-screen items-center'>
+        <div className='w-[30%] p-10 shadow-md bg-white'>
+          <form onSubmit={handleSubmit} className='space-y-5'>
+            <div>
+              <p className='mb-2'>Full Name</p>
+              <input
+                type="text"
+                placeholder='Enter your full name'
+                name='fullName'
+                onChange={handleChange}
+                value={inputData.fullName}
+                className='py-2 outline outline-blue-500 w-full rounded-md border'
+              />
+            </div>
+            <div>
+              <p className='mb-2'>Email</p>
+              <input
+                type="text"
+                placeholder='Enter your email'
+                name='email'
+                onChange={handleChange}
+                value={inputData.email}
+                className='py-2 outline outline-blue-500 w-full rounded-md border'
+              />
+            </div>
+            <div>
+              <p className='mb-2'>Password</p>
+              <input
+                type="password"
+                placeholder='Enter your password'
+                name='password'
+                onChange={handleChange}
+                value={inputData.password}
+                className='py-2 outline outline-blue-600 w-full rounded-md border'
+              />
+            </div>
+            <div>
+              <p className='mb-2'>Confirm Password</p>
+              <input
+                type="password"
+                placeholder='Confirm Password'
+                name='confirmPassword'
+                onChange={handleChange}
+                value={inputData.confirmPassword}
+                className='py-2 outline outline-blue-600 w-full rounded-md border'
+              />
+              {passwordMismatch && <p className="text-red-500">Passwords do not match.</p>}
+            </div>
 
-        <div className="flex items-center space-x-1 bg-gray-200 rounded-lg p-2">
-          <CiUser className="text-xl" />
-          <input
-            className="bg-transparent w-full outline-none"
-            type="text"
-            placeholder="First Name"
-            required
-            value={firstName} 
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </div>
+            <div>
+              <Button className='w-full' variant='contained' type='submit'>
+                SignUp
+              </Button>
+            </div>
+          </form>
 
-        <div className="my-4 flex items-center space-x-1 bg-gray-200 rounded-lg p-2">
-          <CiUser className="text-xl" />
-          <input
-            className="bg-transparent w-full outline-none"
-            type="text"
-            placeholder="Last Name"
-            required
-            value={lastName} 
-            onChange={(e) => setLastName(e.target.value)}
-          />
+          <div className='flex space-x-3 items-center mt-5'>
+            <p className='m-0'> already have account </p>
+            <Button className='' variant='text' onClick={() => navigate("/signin")}>
+              Login
+            </Button>
+          </div>
         </div>
+      </div>
 
-        <div className="my-4 flex items-center space-x-1 bg-gray-200 rounded-lg p-2">
-          <CiUser className="text-xl" />
-          <input
-            className="bg-transparent w-full outline-none"
-            type="text"
-            placeholder="email"
-            required
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div className="my-4 flex items-center space-x-1 bg-gray-200 rounded-lg p-2">
-          <RiLockPasswordLine className="text-xl" />
-          <input
-            className="bg-transparent w-full outline-none"
-            type="password"
-            placeholder="password"
-            required
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-         {/* Render error message if exists */}
-         {error && <p className="text-danger">{error}</p>}
-        <button className="bg-black text-white rounded-lg w-full p-2 mb-4" onClick={handleSignup}>Sign up</button>
-      </form>
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={6000}
+        onClose={handleSnackBarClose}
+      >
+        <Alert onClose={handleSnackBarClose} severity="success" sx={{ width: '100%' }}>
+          Your Account Created Successfully !
+        </Alert>
+      </Snackbar>
     </div>
   );
-}
+};
 
-export default Signup;
+export default SignUp; 
