@@ -10,7 +10,7 @@ const SignUp = () => {
   const [passwordMismatch, setPasswordMismatch] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { auth } = useSelector(store => store.auth);
+  const { auth } = useSelector(store => store);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const SignUp = () => {
 
           <div className='flex space-x-3 items-center mt-5'>
             <p className='m-0'> already have account </p>
-            <Button className='' variant='text' onClick={() => navigate("/signin")}>
+            <Button className='' variant='text' onClick={() => navigate("/login")}>
               Login
             </Button>
           </div>

@@ -28,7 +28,7 @@ export const signup = (data) => async (dispatch) => {
 
 export const loginUser = (data) => async (dispatch) => {
   try {
-    const res = await fetch(`${BASE_API_URL}/auth/signin`, {
+    const res = await fetch(`${BASE_API_URL}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ export const loginUser = (data) => async (dispatch) => {
 
 export const currentUser = (token) => async (dispatch) => {
   try {
-    const res = await fetch(`${BASE_API_URL}/api/users/profile`, {
+    const res = await fetch(`${BASE_API_URL}/users/profile`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
