@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import SignUp from "./SignUp";
-import welcome from '../assets/Welcome.jpg';
+import welcome from '../../assets/Welcome.jpg';
 
 export const Registration = () => {
   const location = useLocation();

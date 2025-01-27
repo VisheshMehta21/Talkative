@@ -4,7 +4,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { currentUser, signup } from '../Redux/Auth/Action';
+import { currentUser, signup } from '../../Redux/Auth/Action';
 
 const SignUp = () => {
   const [openSnackBar, setOpenSnackBar] = useState(false);
