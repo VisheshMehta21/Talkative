@@ -46,7 +46,9 @@ const SignUp = () => {
   };
 
   useEffect(() => {
-    if (auth.reqUser?.fullName) {
+    console.log("SIgnup Successful");
+    console.log(auth.reqUser?.email);
+    if (auth.reqUser?.email) {
       navigate("/home");
     }
   }, [auth, navigate]);

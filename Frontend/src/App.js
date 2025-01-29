@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import { Registration } from "./components/Registration/Registration";
-import { Home } from "./components/Home"; // import Home component
+import { HomePage } from "./components/HomePage/HomePage"; // import Home component
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/signup" element={<Registration />} />
         <Route path="/login" element={<Registration />} />
-        <Route path="/home" element={<Home />} /> {/* New Home route */}
+        <Route path="/home" element={<HomePage />} /> {/* New Home route */}
       </Routes>
     </Router>
   );
