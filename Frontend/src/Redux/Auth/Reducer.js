@@ -1,41 +1,39 @@
 import {
-    REGISTER,
-    LOGIN_USER,
-    REQ_USER,
-    SEARCH_USER,
-    UPDATE_USER,
-    LOGOUT_USER
-  } from "./ActionType";
-  
-  const initialState = {
-    signin: null,
-    signup: null,
-    reqUser: null,
-    searchUser: [],
-    updatedUser: null,
+  REGISTER,
+  LOGIN_USER,
+  REQ_USER,
+  SEARCH_USER,
+  UPDATE_USER,
+  LOGOUT_USER,
+  AUTH_ERROR
+} from "./ActionType";
 
-  };
-  
-  export const authReducer = (state = initialState, { type, payload }) => {
-    if (type === REGISTER) {
-      return { ...state, signup: payload };
-    } else if (type === LOGIN_USER) {
-      return { ...state, signin: payload };
-    } else if (type === REQ_USER) {
-      return { ...state, reqUser: payload };
-    } else if (type === SEARCH_USER) {
-      return { ...state, searchUser: payload };
-    } else if (type === UPDATE_USER) {
-      return { ...state, updatedUser: payload };
-    } else if (type === LOGOUT_USER) {
-      return {
-        ...state,
-        signin: null,
-        signup: null,
-        reqUser: null
-      };
-    } else {
-      return state;
-    }
-  };
-  
+const initialState = {
+  signin: null,
+  signup: null,
+  reqUser: null,
+  searchUser: [],
+  updatedUser: null,
+  error: null,  // General error state
+};
+
+export const authReducer = (state = initialState, { type, payload }) => {
+  switch (type) {
+      case REGISTER:
+          return { ...state, signup: payload, error: null };
+      case LOGIN_USER:
+          return { ...state, signin: payload, error: null };
+      case REQ_USER:
+          return { ...state, reqUser: payload, error: null };
+      case SEARCH_USER:
+          return { ...state, searchUser: payload, error: null };
+      case UPDATE_USER:
+          return { ...state, updatedUser: payload, error: null };
+      case LOGOUT_USER:
+          return { ...state, signin: null, signup: null, reqUser: null, error: null };
+      case AUTH_ERROR:
+          return { ...state, error: payload }; // Stores any authentication-related error
+      default:
+          return state;
+  }
+};

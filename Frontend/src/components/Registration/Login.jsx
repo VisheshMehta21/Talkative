@@ -9,7 +9,7 @@ import { authReducer } from '../../Redux/Auth/Reducer';
 
 function Login() {
 
-    const [error, setError] = useState(''); // useNavigate hook for navigation
+    // const [error, setError] = useState(''); 
 
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [inputData, setInputData] = useState({ email: "", password: "" });
@@ -17,6 +17,10 @@ function Login() {
     const dispatch = useDispatch();
     const token = localStorage.getItem("token");
     const {auth} = useSelector(store=>store);
+    const { error } = useSelector(store => store.auth);  // Access error from authReducer
+    const [loginError, setLoginError] = useState(error);
+
+
 
     useEffect(() => {
 
@@ -26,9 +30,11 @@ function Login() {
       }
     }, [token, auth.reqUser, dispatch]);
 
-    const handleChange = (e) => {
+    const handleInputDataChange = (e) => {
       const {name, value} = e.target;
       setInputData((values)=>({...values,[name]:value }));
+
+      if (loginError) setLoginError(null);
     }
 
     const handleSubmit = (e) => {
@@ -54,7 +60,7 @@ function Login() {
       console.log("UseEffect 2 : Signin");
 
 
-      if (authReducer.reqUser?.fullName) {
+      if (authReducer.reqUser?.email) {
            
           console.log("navigating on chat page :: " + auth);
           setOpenSnackBar(true);
@@ -63,6 +69,11 @@ function Login() {
 
       console.log("we dont have authuser :: " +auth);
   }, [auth.reqUser]);
+
+  useEffect(() => {
+    setLoginError(error);
+  }, [error]);
+
 
 
     return (
@@ -76,7 +87,7 @@ function Login() {
                 placeholder="email"
                 required
                 name="email"
-                onChange={handleChange} 
+                onChange={handleInputDataChange} 
                 value={inputData.email} 
               />
             </div>
@@ -88,11 +99,13 @@ function Login() {
                 placeholder="password"
                 required
                 name="password"
-                onChange={handleChange} 
+                onChange={handleInputDataChange} 
                 value={inputData.password} 
               />
             </div>
-            {error && <p className="text-danger">{error}</p>} 
+            
+            {loginError && (<Alert severity="error" className="mb-2">{loginError}</Alert>)}
+
             <button type="submit" className="bg-black text-white rounded-lg w-full p-2 mb-4">
               Login
             </button>

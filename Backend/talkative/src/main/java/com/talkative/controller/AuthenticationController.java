@@ -8,6 +8,7 @@ import com.talkative.entity.Users;
 import com.talkative.service.AuthenticationService;
 import com.talkative.service.impl.JwtService;
 import jakarta.validation.Valid;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

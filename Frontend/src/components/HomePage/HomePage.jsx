@@ -1,6 +1,6 @@
 import React from 'react'
 
-const HomePage = () => {
+export const HomePage = () => {
     return (
       <div className="h-screen flex flex-col">
         <div className="h-[35%] bg-blue-300 flex items-center justify-center">
@@ -12,7 +12,5 @@ const HomePage = () => {
       </div>
     );
   };
-  
-  export default HomePage;
   
   

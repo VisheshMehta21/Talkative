@@ -5,7 +5,8 @@ import {
   REQ_USER,
   SEARCH_USER,
   UPDATE_USER,
-  LOGOUT_USER
+  LOGOUT_USER,
+  AUTH_ERROR
 } from './ActionType';
 
 export const signup = (data) => async (dispatch) => {
@@ -36,13 +37,29 @@ export const loginUser = (data) => async (dispatch) => {
       body: JSON.stringify(data),
     });
 
+    if (!res.ok) {
+      // Check for network issues
+      if (res.status === 500 || res.status === 0) {
+        throw new Error("Network error. Please try again later.");
+      }
+
+      // Handle incorrect credentials
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Incorrect email or password. Please sign up if you haven’t created an account.");
+    }
+
     const resData = await res.json();
-    if (resData.jwt) localStorage.setItem('token', resData.jwt);
+    if (resData.jwtToken) {
+      localStorage.setItem('token', resData.jwtToken);
+    }
     dispatch({ type: LOGIN_USER, payload: resData });
+
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('Login error:', error.message);
+    dispatch({ type: AUTH_ERROR, payload: error.message });
   }
 };
+
 
 export const currentUser = (token) => async (dispatch) => {
   try {
