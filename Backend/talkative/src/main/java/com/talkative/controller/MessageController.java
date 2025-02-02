@@ -8,9 +8,12 @@ import com.talkative.entity.Message;
 import com.talkative.entity.Users;
 import com.talkative.service.MessageService;
 import com.talkative.service.UsersService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,9 +34,15 @@ public class MessageController {
 	
 	
 	@PostMapping("/create")
-	public ResponseEntity<Message> sentMessageHandler(@RequestBody SendMessageRequest sendMessageRequest, @RequestHeader("Authorization") String jwt) {
+	public ResponseEntity<Message> sentMessageHandler(HttpServletRequest httpServletRequest, @RequestBody SendMessageRequest sendMessageRequest) {
 
-		Users user = usersService.findUserFromToken(jwt);
+		// Get the authentication from the security context
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		// Extract email from the authentication (after JwtAuthenticationFilter sets it)
+		String email = authentication.getName();
+
+		Users user = usersService.findUserByEmail(email);
 
 		sendMessageRequest.setUserId(user.getId());
 		Message sentMessage = messageService.sentMessage(sendMessageRequest);
@@ -44,9 +53,15 @@ public class MessageController {
 	}
 
 	@GetMapping("/chat/{chatId}")
-	public ResponseEntity<List<Message>> GetChatMessagesHandler(@PathVariable Long chatId, @RequestHeader("Authorization") String jwt) {
+	public ResponseEntity<List<Message>> GetChatMessagesHandler(@PathVariable Long chatId, HttpServletRequest httpServletRequest) {
 
-		Users user = usersService.findUserFromToken(jwt);
+		// Get the authentication from the security context
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		// Extract email from the authentication (after JwtAuthenticationFilter sets it)
+		String email = authentication.getName();
+
+		Users user = usersService.findUserByEmail(email);
 
 		List<Message> messages = messageService.getChatsMessages(chatId, user);
 

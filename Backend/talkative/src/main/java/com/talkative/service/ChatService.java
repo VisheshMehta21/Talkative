@@ -10,7 +10,7 @@ public interface ChatService {
 
     public Chat createChat(Users reqUser, String email);
 
-    public Chat createGroup(GroupChatReq req, Users reqUser);
+    public Chat createGroup(GroupChatReq req, Users reqUser, String chatImae);
 
     public Chat findChatById(Long chatId);
 

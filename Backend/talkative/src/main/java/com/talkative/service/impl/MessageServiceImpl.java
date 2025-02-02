@@ -36,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
 		Chat chat = chatService.findChatById(req.getChatId());
 		
 		Message message = new Message();
-		message.setChatId(chat);
+		message.setChat(chat);
 		message.setSenderId(user);
 		message.setContent(req.getContent());
 		message.setTimestamp(LocalDateTime.now());

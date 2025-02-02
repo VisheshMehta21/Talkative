@@ -28,7 +28,7 @@ public class AuthenticationController {
     public ResponseEntity<?> registrationHandler(@RequestBody @Valid SignupRequest signupRequest) {
 
         SignupResponse signupResponse = authenticationService.signup(signupRequest);
-        return new ResponseEntity<SignupResponse>(signupResponse, HttpStatus.OK);
+        return new ResponseEntity<SignupResponse>(signupResponse, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

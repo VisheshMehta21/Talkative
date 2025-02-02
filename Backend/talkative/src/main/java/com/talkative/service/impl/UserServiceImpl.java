@@ -1,5 +1,6 @@
 package com.talkative.service.impl;
 
+import com.talkative.dto.UpdateUserReq;
 import com.talkative.dto.UsersProfileDto;
 import com.talkative.dto.UsersProfilePicUpdateDto;
 import com.talkative.dto.UsersProfileUpdateDto;
@@ -9,16 +10,18 @@ import com.talkative.repository.UsersRepository;
 import com.talkative.service.FileStorageService;
 import com.talkative.service.UsersService;
 import com.talkative.utility.MessageConstants;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UsersService {
 
     @Autowired
@@ -29,6 +32,9 @@ public class UserServiceImpl implements UsersService {
 
     @Autowired
     JwtService jwtService;
+
+    @Value("${minio.bucket-name}")
+    private String bucketName;
 
     @Override
     public Users findUserById(Long userId) {
@@ -47,6 +53,8 @@ public class UserServiceImpl implements UsersService {
                 .stream()
                 .map(user -> {
                     UsersProfileDto usersProfile = new UsersProfileDto();
+
+                    usersProfile.setUserId(user.getId());
                     usersProfile.setFirstName(user.getFirstName());
                     usersProfile.setLastName(user.getLastName());
                     usersProfile.setCreatedAt(user.getCreatedAt());
@@ -65,6 +73,7 @@ public class UserServiceImpl implements UsersService {
 
         UsersProfileDto usersProfile = new UsersProfileDto();
 
+        usersProfile.setUserId(user.getId());
         usersProfile.setFirstName(user.getFirstName());
         usersProfile.setLastName(user.getLastName());
         usersProfile.setEmail(user.getEmail());
@@ -87,18 +96,29 @@ public class UserServiceImpl implements UsersService {
     }
 
     @Override
-    public void updateUserProfilePic(UsersProfilePicUpdateDto usersProfilePicUpdateDto, String email) throws Exception {
+    public UsersProfileDto updateUserProfilePic(UsersProfilePicUpdateDto usersProfilePicUpdateDto, String email) throws Exception {
 
-        String profileUrl = fileStorageService.uploadFile(usersProfilePicUpdateDto.getProfilePic());
+        String profileUrl = fileStorageService.uploadFile(usersProfilePicUpdateDto.getProfilePicture());
 
+        log.info("Profile pic url {} for user {}.", profileUrl, email);
         Users user = usersRepository.findByEmail(email)
                 .orElseThrow(() -> new EmailNotFoundException(MessageConstants.USER_NOT_EXIST));
 
         user.setProfileUrl(profileUrl);
 
-        Users updatedUser = usersRepository.save(user);
+        user = usersRepository.save(user);
 
-        String updatedProfileUrl = updatedUser.getProfileUrl();
+        UsersProfileDto usersProfile = new UsersProfileDto();
+
+        usersProfile.setUserId(user.getId());
+        usersProfile.setFirstName(user.getFirstName());
+        usersProfile.setLastName(user.getLastName());
+        usersProfile.setEmail(user.getEmail());
+        usersProfile.setCreatedAt(user.getCreatedAt());
+        usersProfile.setProfileUrl(user.getProfileUrl());
+        usersProfile.setVerified(user.getIsVerified());
+
+        return usersProfile;
     }
 
     @Override
@@ -116,4 +136,30 @@ public class UserServiceImpl implements UsersService {
     }
 
 
+    @Override
+    public UsersProfileDto updateUser(Long id, UpdateUserReq req) {
+        Users user = findUserById(id);
+
+
+        if(req.getFirstName()!=null) {
+            user.setFirstName(req.getFirstName());
+        }
+        if(req.getLastName()!=null) {
+            user.setLastName(req.getLastName());
+        }
+        if(req.getProfilePicture()!=null) {
+            user.setProfileUrl(req.getProfilePicture());
+        }
+        user = usersRepository.save(user);
+
+        UsersProfileDto usersProfile = new UsersProfileDto();
+
+        usersProfile.setUserId(user.getId());
+        usersProfile.setFirstName(user.getFirstName());
+        usersProfile.setLastName(user.getLastName());
+        usersProfile.setCreatedAt(user.getCreatedAt());
+        usersProfile.setProfileUrl(user.getProfileUrl());
+        usersProfile.setEmail(user.getEmail());
+        return usersProfile;
+    }
 }

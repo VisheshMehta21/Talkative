@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class UsersProfileDto {
 
 
-
+    private Long userId;
     private String firstName;
     private String lastName;
     private String profileUrl;

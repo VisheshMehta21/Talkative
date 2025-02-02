@@ -4,36 +4,44 @@ import {
   REQ_USER,
   SEARCH_USER,
   UPDATE_USER,
+  UPDATE_PROFILE_PIC,
   LOGOUT_USER,
-  AUTH_ERROR
-} from "./ActionType";
+  AUTH_ERROR,
+  RESET_AUTH_ERROR
+} from './ActionType';
 
 const initialState = {
-  signin: null,
-  signup: null,
-  reqUser: null,
-  searchUser: [],
-  updatedUser: null,
-  error: null,  // General error state
+  user: null,
+  searchedUsers: [],
+  error: null,
 };
 
-export const authReducer = (state = initialState, { type, payload }) => {
-  switch (type) {
+const authReducer = (state = initialState, action) => {
+  switch (action.type) {
       case REGISTER:
-          return { ...state, signup: payload, error: null };
+          return { ...state, user: action.payload, error: null };
       case LOGIN_USER:
-          return { ...state, signin: payload, error: null };
+          return { ...state, user: action.payload, error: null };
       case REQ_USER:
-          return { ...state, reqUser: payload, error: null };
+          return { ...state, user: action.payload };
       case SEARCH_USER:
-          return { ...state, searchUser: payload, error: null };
+          return { ...state, searchedUsers: action.payload };
       case UPDATE_USER:
-          return { ...state, updatedUser: payload, error: null };
+          return { ...state, user: action.payload };
+      case UPDATE_PROFILE_PIC:
+          return { 
+              ...state, 
+              user: { ...state.user, profilePicUrl: action.payload.profilePicUrl } 
+          };
       case LOGOUT_USER:
-          return { ...state, signin: null, signup: null, reqUser: null, error: null };
+          return { ...state, user: null };
       case AUTH_ERROR:
-          return { ...state, error: payload }; // Stores any authentication-related error
+          return { ...state, error: action.payload };
+      case RESET_AUTH_ERROR:
+          return { ...state, error: null };
       default:
           return state;
   }
 };
+
+export default authReducer;

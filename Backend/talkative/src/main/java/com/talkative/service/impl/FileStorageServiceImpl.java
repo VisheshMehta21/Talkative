@@ -17,6 +17,9 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Value("${minio.bucket-name}")
     private String bucketName;
 
+    @Value("${minio.url}")
+    private String url;
+
     public FileStorageServiceImpl(@Value("${minio.url}") String url,
                               @Value("${minio.access-key}") String accessKey,
                               @Value("${minio.secret-key}") String secretKey) {
@@ -44,6 +47,9 @@ public class FileStorageServiceImpl implements FileStorageService {
                         .contentType(file.getContentType())
                         .build()
         );
+
+        objectName = String.format("%s/%s/%s", url, bucketName, objectName);
+
         return objectName;
     }
 

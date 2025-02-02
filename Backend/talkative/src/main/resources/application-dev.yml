@@ -21,3 +21,4 @@ minio:
   access-key: minioadmin
   secret-key: minioadmin
   bucket-name: talkative
+

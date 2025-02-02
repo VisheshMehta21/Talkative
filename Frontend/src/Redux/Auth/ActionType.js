@@ -1,7 +1,9 @@
-export const REGISTER="REGISTER";
-export const LOGIN_USER="LOGIN_USER";
-export const REQ_USER="REQ_USER";
-export const SEARCH_USER="SEARCH_USER";
-export const UPDATE_USER="UPDATE_USER";
-export const LOGOUT_USER="LOGOUT_USER";
+export const REGISTER = "REGISTER";
+export const LOGIN_USER = "LOGIN_USER";
+export const REQ_USER = "REQ_USER";
+export const SEARCH_USER = "SEARCH_USER";
+export const UPDATE_USER = "UPDATE_USER";
+export const UPDATE_PROFILE_PIC = "UPDATE_PROFILE_PIC";
+export const LOGOUT_USER = "LOGOUT_USER";
 export const AUTH_ERROR = "AUTH_ERROR";
+export const RESET_AUTH_ERROR = "RESET_AUTH_ERROR";

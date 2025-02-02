@@ -4,7 +4,7 @@ import { BASE_API_URL } from "../../Config/Config"
 
 export const createMessage =(messageData) => async (dispatch) =>{
     try {
-        const res = await fetch(`${BASE_API_URL}/api/messages/create`, {
+        const res = await fetch(`${BASE_API_URL}/messages/create`, {
             method:"POST",
             headers:{
                 "Content-Type" : "application/json",
@@ -12,7 +12,7 @@ export const createMessage =(messageData) => async (dispatch) =>{
             },
             body:JSON.stringify(messageData.data)
         })
-    
+        console.log(messageData);
         const data = await res.json();
         console.log("Message data from server", data);
         dispatch({type:CREATE_NEW_MESSAGE,payload:data});
@@ -22,9 +22,8 @@ export const createMessage =(messageData) => async (dispatch) =>{
     }
 
     export const getAllMessages =(reqData) => async (dispatch) =>{
-        console.log(reqData.token);
         try {
-            const res = await fetch(`${BASE_API_URL}/api/messages/chat/${reqData.chatId}`, {
+            const res = await fetch(`${BASE_API_URL}/messages/chat/${reqData.chatId}`, {
                 method:"GET",
                 headers:{
                     "Content-Type" : "application/json",

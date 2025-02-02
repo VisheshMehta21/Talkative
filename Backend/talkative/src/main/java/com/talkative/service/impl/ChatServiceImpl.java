@@ -47,17 +47,18 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Chat createGroup(GroupChatReq req, Users reqUser) {
+    public Chat createGroup(GroupChatReq req, Users reqUser, String chatImage) {
 
         Chat group = new Chat();
         group.setGroup(true);
-        group.setChatImg(req.getChatImage());
+        group.setChatImg(chatImage);
         group.setChatName(req.getChatName());
         group.setCreatedBy(reqUser);
         group.getAdmins().add(reqUser);
-        // get member 1 by 1 and add it into grp
-        for(String email : req.getEmails()) {
-            Users usersToAddGroup = usersService.findUserByEmail(email);
+
+        group.getUsers().add(reqUser);
+        for(Long userId : req.getUserIds()) {
+            Users usersToAddGroup = usersService.findUserById(userId);
             group.getUsers().add(usersToAddGroup);
         }
 
@@ -79,6 +80,8 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<Chat> findAllChatByUserId(String email) {
+
+        log.info("Querying all the chats for the user {}.", email);
 
         Users user = usersService.findUserByEmail(email);
 

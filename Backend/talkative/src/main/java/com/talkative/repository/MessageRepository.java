@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message, Long>{
 
-	@Query("Select m from Message m join m.chatId c where c.id=:chatId")
+	@Query("Select m from Message m join m.chat c where c.id=:chatId")
 	public List<Message> findByChatId(@Param("chatId") Long chatId);
 }

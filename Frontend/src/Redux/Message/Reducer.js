@@ -6,8 +6,7 @@ const initialValue = {
 
 }
 
-
-export const messageReducer = (store = initialValue, { type, payload }) => {
+const messageReducer = (store = initialValue, { type, payload }) => {
 
     if (type === CREATE_NEW_MESSAGE) {
         return { ...store, newMessage: payload }
@@ -16,4 +15,6 @@ export const messageReducer = (store = initialValue, { type, payload }) => {
         return { ...store, messages: payload }
     }
     return store;
-}
+};
+
+export default messageReducer;

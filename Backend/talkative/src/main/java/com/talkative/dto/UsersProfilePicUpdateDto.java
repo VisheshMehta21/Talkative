@@ -10,5 +10,5 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class UsersProfilePicUpdateDto {
 
-    MultipartFile profilePic;
+    MultipartFile profilePicture;
 }

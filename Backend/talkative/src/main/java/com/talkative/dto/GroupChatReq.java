@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GroupChatReq {
 
-	private List<String> emails;
+	private List<Long> userIds;
 	private String chatName;
-	private String chatImage;
 }
