@@ -1,0 +1,8 @@
+FROM minio/minio
+
+# Copy the custom entrypoint script into the container
+COPY minio-entrypoint.sh /usr/bin/minio-entrypoint.sh
+COPY init.sh /etc/minio/init.sh
+
+# Set the entrypoint to the custom script
+ENTRYPOINT ["/usr/bin/minio-entrypoint.sh"]
