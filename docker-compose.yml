@@ -16,16 +16,16 @@ services:
       - app-network
 
   minio:
-    image: minio/minio
+    build:
+      context: ./minio
+      dockerfile: dockerfile  # Update to the correct path if necessary
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-    command: ["sh", "-c", "/etc/minio/init.sh && minio server /data --console-address \":9001\""]
     ports:
       - "9000:9000"
       - "9001:9001"
     volumes:
-      - ./scripts/init.sh:/etc/minio/init.sh  # Mount init script
       - minio-data:/data  # MinIO data volume
     networks:
       - app-network
