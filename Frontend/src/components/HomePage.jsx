@@ -135,7 +135,6 @@ const HomePage = () => {
 
     const handleCreateNewMessage = () => {
         dispatch(createMessage({ token, data: { chatId: currentChat.chatId, content: content } }));
-
     }
 
 
