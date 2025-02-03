@@ -30,7 +30,10 @@ const HomePage = () => {
     const open = Boolean(anchorEl);
     const [isGroup, setIsGroup] = useState(false);
     const dispatch = useDispatch();
-    const { auth, chat, message } = useSelector(store => store);
+    // const { auth, chat, message } = useSelector(store => store);
+    const auth = useSelector(store => store.auth);
+    const chat = useSelector(store => store.chat);
+    const message = useSelector(store => store.message);
     const token = localStorage.getItem("token");
     const [stompClient, setStompClient] = useState();
     const [isConnected, setIsConnected] = useState(false);
@@ -229,7 +232,7 @@ const HomePage = () => {
                                     <div onClick={HandleNavigate} className='flex items-center space-x-3'>
                                         <img
                                             className='rounded-full w-10 h-10 cursor-pointer'
-                                            src={ auth.user?.profileUrl || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
+                                            src={auth.user?.profileUrl || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"}
                                             alt="profile"
                                         />
                                         <p>{auth.user?.firstName}</p>
@@ -330,13 +333,13 @@ const HomePage = () => {
 
                     <div className='w-[70%]'>
                         {!currentChat &&
-                            <div class='right flex items-center justify-center h-full'>
-                                <div class='w-[70%] flex flex-col items-center justify-center h-full'>
-                                    <div class='max-w-[70%] text-center'>
-                                        <img src="https://www.pngall.com/wp-content/uploads/10/Message-Silhouette-Background-PNG-Image.png" alt="profilepic main chat" class='h-[20rem] w-[20rem]' />
-                                        <h1 class='text-4xl mt-5'>Welcome, {auth.user?.firstName?.split(' ')[0]}</h1>
+                            <div className='right flex items-center justify-center h-full'>
+                                <div className='w-[70%] flex flex-col items-center justify-center h-full'>
+                                    <div className='max-w-[70%] text-center'>
+                                        <img src="https://www.pngall.com/wp-content/uploads/10/Message-Silhouette-Background-PNG-Image.png" alt="profilepic main chat" className='h-[20rem] w-[20rem]' />
+                                        <h1 className='text-4xl mt-5'>Welcome, {auth.user?.firstName?.split(' ')[0]}</h1>
 
-                                        <p class='text-gray-500 text-sm mt-5 '>Developed by Vishesh</p>
+                                        <p className='text-gray-500 text-sm mt-5 '>Developed by Vishesh</p>
 
                                     </div>
                                 </div>

@@ -12,11 +12,21 @@ const AppContent = () => {
   useEffect(() => {
     const checkTokenExpiration = () => {
       const token = localStorage.getItem("token");
-      if (!token) return navigate("/login");
+
+      // Skip token check for signup and login routes
+      if (window.location.pathname === "/signup" || window.location.pathname === "/login") {
+        return;
+      }
+
+      if (!token) {
+        alert("Session expired, please login.");
+        return navigate("/login");
+      }
 
       const payload = JSON.parse(atob(token.split(".")[1]));
       if (payload.exp * 1000 < Date.now()) {
         localStorage.removeItem("token");
+        alert("Session expired, please login.");
         navigate("/login");
       }
     };

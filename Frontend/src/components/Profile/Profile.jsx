@@ -10,7 +10,7 @@ const Profile = ({ HandleCloseOpenProfile }) => {
     const [lastName, setLastName] = useState(null);
     const [tempPicture, setTempPicture] = useState(null);
     
-    const { auth } = useSelector((store) => store);
+    const  auth  = useSelector((store) => store.auth);
     const dispatch = useDispatch();
 
     // Set initial values from the user's data

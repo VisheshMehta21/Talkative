@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: talkative
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+    volumes:
+      - ./Backend/talkative/src/resources/data.sql:/docker-entrypoint-initdb.d/data.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
+
+  minio:
+    image: minio/minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: ["sh", "-c", "/etc/minio/init.sh && minio server /data --console-address \":9001\""]
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ./scripts/init.sh:/etc/minio/init.sh  # Mount init script
+      - minio-data:/data  # MinIO data volume
+    networks:
+      - app-network
+
+  springboot-app:
+    build:
+      context: ./Backend/talkative
+    image: springboot-app
+    ports:
+      - "8000:8000"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/talkative
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - mysql
+      - minio
+    networks:
+      - app-network
+
+  react-app:
+    build:
+      context: ./Frontend
+    image: react-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Frontend:/app  # Sync the local frontend code with the container
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  minio-data:  # MinIO data volume

@@ -2,6 +2,7 @@ package com.talkative.service.impl;
 
 import com.talkative.service.FileStorageService;
 import io.minio.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.net.URL;
 
+@Slf4j
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
 
@@ -20,6 +22,9 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Value("${minio.url}")
     private String url;
 
+    @Value("${minio.fetch-url}")
+    private String fetchUrl;
+
     public FileStorageServiceImpl(@Value("${minio.url}") String url,
                               @Value("${minio.access-key}") String accessKey,
                               @Value("${minio.secret-key}") String secretKey) {
@@ -27,6 +32,17 @@ public class FileStorageServiceImpl implements FileStorageService {
                 .endpoint(url)
                 .credentials(accessKey, secretKey)
                 .build();
+        try {
+            boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
+            if (!bucketExists) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+                log.info("Bucket '{}' created successfully.", bucketName);
+            } else {
+                log.info("Bucket '{}' already exists.", bucketName);
+            }
+        } catch (Exception e) {
+            log.error("Error checking/creating bucket '{}': {}", bucketName, e.getMessage());
+        }
     }
 
     public String uploadFile(MultipartFile file) throws Exception {
@@ -48,7 +64,12 @@ public class FileStorageServiceImpl implements FileStorageService {
                         .build()
         );
 
-        objectName = String.format("%s/%s/%s", url, bucketName, objectName);
+        if(fetchUrl != null && !fetchUrl.isEmpty()) {
+            objectName = String.format("%s/%s/%s", fetchUrl, bucketName, objectName);
+        }
+        else {
+            objectName = String.format("%s/%s/%s", url, bucketName, objectName);
+        }
 
         return objectName;
     }

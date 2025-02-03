@@ -20,7 +20,9 @@ const Status = () => {
                 </div>
                 <hr />
                 <div className='overflow-y-auto h-[85%]'>
-                    {[1,2,3,4,5,6,7,8,9,10].map((item)=> <StatusUserCard />)}
+                    {[1,2,3,4,5,6,7,8,9,10].map((item, index) => (
+                        <StatusUserCard key={index} />
+                    ))}
                 </div>
             </div>
             <div className='right relative h-[85vh] lg:w-[70%] w-[50%] bg-[#0b141a]'>
