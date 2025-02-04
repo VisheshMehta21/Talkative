@@ -14,7 +14,7 @@ const CreateGroup = ({ setIsGroup }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = localStorage.getItem("token");
-    const { auth } = useSelector(store => store);
+    const auth = useSelector(store => store.auth);
 
 
     const handleRemoveMember = (item) => {

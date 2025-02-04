@@ -27,7 +27,6 @@ const HomePage = () => {
     const [content, setcontent] = useState('');
     const [isprofile, setisprofile] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
     const [isGroup, setIsGroup] = useState(false);
     const dispatch = useDispatch();
     // const { auth, chat, message } = useSelector(store => store);
@@ -140,7 +139,8 @@ const HomePage = () => {
 
 
     const HandleNavigate = () => {
-        //  navigate('/profile');
+        // navigate('/profile');
+        handleClose();
         setisprofile(true);
     }
 
@@ -156,6 +156,7 @@ const HomePage = () => {
     };
 
     const handleCreateGroup = () => {
+        handleClose();
         setIsGroup(true);
     };
 
@@ -245,9 +246,9 @@ const HomePage = () => {
 
 
                                             <BsThreeDotsVertical id="basic-button"
-                                                aria-controls={open ? 'basic-menu' : undefined}
+                                                aria-controls={Boolean(anchorEl) ? 'basic-menu' : undefined}
                                                 aria-haspopup="true"
-                                                aria-expanded={open ? 'true' : undefined}
+                                                aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
                                                 onClick={handleClick} />
 
 
@@ -255,7 +256,7 @@ const HomePage = () => {
                                             <Menu
                                                 id="basic-menu"
                                                 anchorEl={anchorEl}
-                                                open={open}
+                                                open={Boolean(anchorEl)}
                                                 onClose={handleClose}
                                                 MenuListProps={{
                                                     'aria-labelledby': 'basic-button',
