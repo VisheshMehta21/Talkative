@@ -4,30 +4,41 @@ import com.talkative.service.FileStorageService;
 import io.minio.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
 
 @Slf4j
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
 
     private final MinioClient minioClient;
+    private final String bucketName;
+    private final String url;
+    private final String fetchUrl; // Only set if profile is "docker"
 
-    @Value("${minio.bucket-name}")
-    private String bucketName;
+    public FileStorageServiceImpl(
+            @Value("${minio.bucket-name}") String bucketName,
+            @Value("${minio.url}") String url,
+            @Value("${minio.access-key}") String accessKey,
+            @Value("${minio.secret-key}") String secretKey,
+            @Value("${minio.fetch-url:}") String fetchUrl, // Optional property
+            Environment environment // Inject Spring environment
+    ) {
+        this.bucketName = bucketName;
+        this.url = url;
 
-    @Value("${minio.url}")
-    private String url;
+        // Check if "docker" is an active profile
+        if (Arrays.asList(environment.getActiveProfiles()).contains("docker")) {
+            this.fetchUrl = fetchUrl;
+        } else {
+            this.fetchUrl = null;
+        }
 
-    @Value("${minio.fetch-url}")
-    private String fetchUrl;
-
-    public FileStorageServiceImpl(@Value("${minio.url}") String url,
-                              @Value("${minio.access-key}") String accessKey,
-                              @Value("${minio.secret-key}") String secretKey) {
         this.minioClient = MinioClient.builder()
                 .endpoint(url)
                 .credentials(accessKey, secretKey)
@@ -37,8 +48,6 @@ public class FileStorageServiceImpl implements FileStorageService {
             if (!bucketExists) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
                 log.info("Bucket '{}' created successfully.", bucketName);
-            } else {
-                log.info("Bucket '{}' already exists.", bucketName);
             }
         } catch (Exception e) {
             log.error("Error checking/creating bucket '{}': {}", bucketName, e.getMessage());
@@ -64,10 +73,9 @@ public class FileStorageServiceImpl implements FileStorageService {
                         .build()
         );
 
-        if(fetchUrl != null && !fetchUrl.isEmpty()) {
+        if (fetchUrl != null && !fetchUrl.isEmpty()) {
             objectName = String.format("%s/%s/%s", fetchUrl, bucketName, objectName);
-        }
-        else {
+        } else {
             objectName = String.format("%s/%s/%s", url, bucketName, objectName);
         }
 
@@ -75,7 +83,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public InputStream getFile(String fileUrl) throws Exception{
+    public InputStream getFile(String fileUrl) throws Exception {
         // Parse the URL to get the object name (path within the bucket)
         URL url = new URL(fileUrl);
         String objectName = url.getPath().substring(1 + bucketName.length());  // Remove bucket prefix
